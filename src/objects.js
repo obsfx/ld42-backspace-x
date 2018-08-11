@@ -26,19 +26,19 @@ function initObjects() {
     }
 
     ARCADE.Player.prototype.update = function() {
-        if (this.keys["w"]) {
+        if (this.keys["w"] && this.pos.y > 0) {
             this.pos.y -= this.vel;
         } 
         
-        if (this.keys["a"]) {
+        if (this.keys["a"] && this.pos.x > 0) {
             this.pos.x -= this.vel;
         }
         
-        if (this.keys["s"]) {
+        if (this.keys["s"] && this.pos.y + this.h < height) {
             this.pos.y += this.vel;
         } 
         
-        if (this.keys["d"]) {
+        if (this.keys["d"] && this.pos.x + this.w < width) {
             this.pos.x += this.vel;
         }
 
@@ -60,6 +60,10 @@ function initObjects() {
 
         for (var i in this.bullets) {
             this.bullets[i].draw();
+
+            if (this.bullets[i].pos.x > width) {
+                this.bullets.slice(i, 1);
+            }
         }
     }
 
@@ -89,4 +93,26 @@ function initObjects() {
         rect(this.pos.x, this.pos.y, this.w, this.h);
     }
 
+
+    //Asteroids
+    ARCADE.Asteroid = function() {
+        this.pos = createVector(random(width, random(width + 25, width + 150)), random(50, height - 50));
+        this.t = random(1, 3);
+        this.hp = this.t * 3;
+        this.movement = createVector( -random(0.5, 2), random(-0.5, 0.5));
+        this.size = this.t * 25;
+        this.sprite = createSprite(this.pos.x, this.pos.y, this.w, this.h);
+    }
+
+    ARCADE.Asteroid.prototype.update = function() {
+        this.pos.add(this.movement);
+        this.sprite.position.x = this.pos.x;
+        this.sprite.position.y = this.pos.y;
+    }
+
+    ARCADE.Asteroid.prototype.draw = function() {
+        this.update();
+        fill(0, 255, 0);
+        ellipse(this.pos.x, this.pos.y, this.size, this.size)
+    }
 }
