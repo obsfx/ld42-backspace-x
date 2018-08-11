@@ -21,7 +21,6 @@ function initObjects() {
         this.firedFrame = null;
         this.bulletMovement = 20;
         this.score = 0;
-        this.sprite = createSprite(this.pos.x + this.w / 2, this.pos.y + this.h / 2, this.w, this.h);
     }
 
     ARCADE.Player.prototype.controls = function() {
@@ -45,11 +44,12 @@ function initObjects() {
             this.pos.x += this.vel;
         }
 
-        this.sprite.position.x = this.pos.x + this.w / 2;
-        this.sprite.position.y = this.pos.y + this.h / 2;
-
-        if (this.sprite.collide(ARCADE.Asteroids_S)) {
-            console.log("hit by asteroid")
+        for (var i in ARCADE.Asteroids) {
+            let col = collideRectCircle(this.pos.x, this.pos.y, this.w, this.h, ARCADE.Asteroids[i].pos.x, ARCADE.Asteroids[i].pos.y, ARCADE.Asteroids[i].size);
+            if (col) {
+                console.log(i, "hit");
+                break;
+            }
         }
 
         if (this.keys[" "]) {
@@ -64,12 +64,14 @@ function initObjects() {
 
         for (var i in ARCADE.Aliens) {
             for (var j in ARCADE.Aliens[i].bullets) {
-                if (this.sprite.overlap(ARCADE.Aliens[i].bullets[j].sprite)) {
-                    console.log("hit by alien");
+                let p = collideRectRect(this.pos.x, this.pos.y, this.w, this.h, ARCADE.Aliens[i].bullets[j].pos.x, ARCADE.Aliens[i].bullets[j].pos.y, ARCADE.Aliens[i].bullets[j].w, ARCADE.Aliens[i].bullets[j].h);
+                if (p) {
+                    console.log("HIT BY ALIEN");
                     ARCADE.Aliens[i].bullets.splice(j, 1);
                 }
             }
         }
+
     }
 
     ARCADE.Player.prototype.draw = function() {
@@ -81,55 +83,93 @@ function initObjects() {
 
     ARCADE.Player.prototype.bulletDraw = function() {
         for (var i in this.bullets) {
-            this.bullets[i].draw();
-
             if (this.bullets[i].pos.x > width) {
                 this.bullets.splice(i, 1);
             } else {
-                let this_ = this;
+
                 let bulletCollide = false;
-                
-                if (!bulletCollide) {
-                    this.bullets[i].sprite.overlap(ARCADE.Asteroids_S, function(collector, collected) {
-                        this_.bullets.splice(i, 1);
+
+                for (var j in ARCADE.Asteroids) {
+                    let p = collideRectCircle(this.bullets[i].pos.x, this.bullets[i].pos.y, this.bullets[i].w, this.bullets[i].h, ARCADE.Asteroids[j].pos.x, ARCADE.Asteroids[j].pos.y, ARCADE.Asteroids[j].size);
+                    if (p) {
+
+                        ARCADE.Asteroids[j].hpbarshowcd = 80;
+
+                        if (!ARCADE.Asteroids[j].hit()) {
+                            this.score += ARCADE.Asteroids[j].point;
     
+                            HUD.ARCADE.updatePoint(this.score);
     
-                        let index = ARCADE.Asteroids_S.indexOf(collected);
-                        ARCADE.Asteroids[index].hpbarshowcd = 80;
-    
-                        if (!ARCADE.Asteroids[index].hit()) {
-                            this_.score += ARCADE.Asteroids[index].point;
-    
-                            HUD.ARCADE.updatePoint(this_.score);
-    
-                            ARCADE.Asteroids.splice(index, 1);
-                            ARCADE.Asteroids_S.splice(index, 1);
+                            ARCADE.Asteroids.splice(j, 1);
                         }
-                        
+
                         bulletCollide = true;
-                    });
+                        break;
+                    }
                 }
 
                 if (!bulletCollide) {
-                    this.bullets[i].sprite.overlap(ARCADE.Aliens_S, function(collector, collected) {
-                        this_.bullets.splice(i, 1);
+                    for (var j in ARCADE.Aliens) {
+                        let p = collideRectRect(this.bullets[i].pos.x, this.bullets[i].pos.y, this.bullets[i].w, this.bullets[i].h, ARCADE.Aliens[j].pos.x, ARCADE.Aliens[j].pos.y, ARCADE.Aliens[j].w, ARCADE.Aliens[j].h);
+                        if (p) {
     
+                            ARCADE.Aliens[j].hpbarshowcd = 80;
     
-                        let index = ARCADE.Aliens_S.indexOf(collected);
-                        ARCADE.Aliens[index].hpbarshowcd = 80;
+                            if (!ARCADE.Aliens[j].hit()) {
+                                this.score += ARCADE.Aliens[j].point;
+        
+                                HUD.ARCADE.updatePoint(this.score);
+        
+                                ARCADE.Aliens.splice(j, 1);
+                            }
     
-                        if (!ARCADE.Aliens[index].hit()) {
-                            this_.score += ARCADE.Aliens[index].point;
-    
-                            HUD.ARCADE.updatePoint(this_.score);
-    
-                            ARCADE.Aliens.splice(index, 1);
-                            ARCADE.Aliens_S.splice(index, 1);
+                            bulletCollide = true;
+                            break;
                         }
-                        
-                        bulletCollide = true;
-                    });
+                    }
                 }
+
+                if (bulletCollide) {
+                    this.bullets.splice(i, 1);
+                } else {
+                    this.bullets[i].draw();
+                }
+                
+
+                /*
+                TRASH CODE
+                this.bullets[i].sprite.overlap(ARCADE.Asteroids_S, function(collector, collected) {
+
+                    let index = ARCADE.Asteroids_S.indexOf(collected);
+                    ARCADE.Asteroids[index].hpbarshowcd = 80;
+
+                    if (!ARCADE.Asteroids[index].hit()) {
+                        this_.score += ARCADE.Asteroids[index].point;
+
+                        HUD.ARCADE.updatePoint(this_.score);
+
+                        ARCADE.Asteroids.splice(index, 1);
+                        ARCADE.Asteroids_S.splice(index, 1);
+                    }
+                    
+                    bulletCollide = true;
+                });
+                this.bullets[i].sprite.overlap(ARCADE.Aliens_S, function(collector, collected) {
+                    let index = ARCADE.Aliens_S.indexOf(collected);
+                    ARCADE.Aliens[index].hpbarshowcd = 80;
+
+                    if (!ARCADE.Aliens[index].hit()) {
+                        this_.score += ARCADE.Aliens[index].point;
+
+                        HUD.ARCADE.updatePoint(this_.score);
+
+                        ARCADE.Aliens.splice(index, 1);
+                        ARCADE.Aliens_S.splice(index, 1);
+                    }
+                    
+                    bulletCollide = true;
+                });*/
+
             }
         }
     }
@@ -148,13 +188,10 @@ function initObjects() {
         this.w = 20;
         this.h = 5;
         this.vel = d;
-        this.sprite = createSprite(this.pos.x, this.pos.y, this.w, this.h);
     }
 
     ARCADE.Bullet.prototype.update = function() {
         this.pos.x += this.vel;
-        this.sprite.position.x = this.pos.x + this.w / 2;
-        this.sprite.position.y = this.pos.y + this.h / 2;
     }
 
     ARCADE.Bullet.prototype.draw = function() {
@@ -176,8 +213,6 @@ function initObjects() {
         this.dmg = this.t * 5;
         this.point = this.t * 3; 
         this.movement = createVector( -random(0.5, 2), random(-0.5, 0.5));
-        this.sprite = createSprite(this.pos.x, this.pos.y, this.w, this.h);
-        this.sprite.setCollider("circle", 0, 0, this.size / 2);
     }
 
     ARCADE.Asteroid.prototype.update = function() {
@@ -187,14 +222,11 @@ function initObjects() {
             let index = ARCADE.Asteroids.indexOf(this);
 
             ARCADE.Asteroids.splice(index, 1);
-            ARCADE.Asteroids_S.splice(index, 1);
-            console.log(ARCADE.Asteroids.length);
+            //console.log(ARCADE.Asteroids.length);
             
             return false;
         }
 
-        this.sprite.position.x = this.pos.x;
-        this.sprite.position.y = this.pos.y;
     }
 
     ARCADE.Asteroid.prototype.draw = function() {
@@ -236,11 +268,10 @@ function initObjects() {
         this.hpbarshowcd = 0;
         this.point = this.t * 3; 
         this.movement = createVector( -random(0.5, 2), 0);
-        this.sprite = createSprite(this.pos.x + this.w / 2, this.pos.y + this.h / 2, this.w, this.h);
         this.bullets = [];
         this.bulletMovement = 5;
         this.fired = false;
-        this.fireRate = floor(random(100, 200));
+        this.fireRate = floor(random(200, 300));
         this.firedFrame = null;
     }
 
@@ -251,14 +282,10 @@ function initObjects() {
             let index = ARCADE.Aliens.indexOf(this);
 
             ARCADE.Aliens.splice(index, 1);
-            ARCADE.Aliens_S.splice(index, 1);
-            console.log(ARCADE.Aliens.length, "Aliens");
+            //console.log(ARCADE.Aliens.length, "Aliens");
             
             return false;
         }
-
-        this.sprite.position.x = this.pos.x + this.w / 2;
-        this.sprite.position.y = this.pos.y + this.h / 2;
 
         if (this.fired) {
             if (frameCount - this.firedFrame > this.fireRate) {
