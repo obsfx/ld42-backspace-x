@@ -43,14 +43,14 @@ function ARCADE_SCENE() {
     ARCADE.Aliens = [];
     ARCADE.Aliens_S = new Group();
 
-    ARCADE.Frame_Count = 0;
+    frameCount = 0;
 
     this.enter = function() {
         HUD.ARCADE.init();
         PLAYER = new ARCADE.Player();
-        WAVE_PHASE = "ALIEN";
-        PHASE_DIF = [4, 8];
-        PHASE_CHANGE_TIME = 1600;
+        WAVE_PHASE = false;
+        PHASE_DIF = [3, 6];
+        PHASE_CHANGE_TIME = 600;
     }
     
     this.keyPressed = function() {
@@ -68,27 +68,14 @@ function ARCADE_SCENE() {
     }
 
     this.draw = function() {
-        ARCADE.Frame_Count += 1;
-
         background(GAME.BG_COLOR);
 
-        if (ARCADE.Frame_Count % PHASE_CHANGE_TIME == 0) {
-            //WAVE_PHASE = (WAVE_PHASE == "ASTEROIDS") ? "ALIEN" : "ASTEROIDS";
-
-            if (PHASE_DIF[0] < 7) {
-                PHASE_DIF[0] += 1;
-            }
-
-            if (PHASE_DIF[1] < 7) {
-                PHASE_DIF[1] += 1;
-            }
-
-            if (PHASE_CHANGE_TIME < 5400) {
-                PHASE_CHANGE_TIME += 400;
-            }
+        if (frameCount % PHASE_CHANGE_TIME == 0) {
+            WAVE_PHASE = !WAVE_PHASE
+            console.log(WAVE_PHASE);
         }
 
-        if (WAVE_PHASE == "ASTEROIDS") {
+        if (WAVE_PHASE) {
             generateAsteroids();
         } else {
             generateAliens();
@@ -97,13 +84,13 @@ function ARCADE_SCENE() {
         PLAYER.draw();
 
         for (let i in ARCADE.Asteroids) {
-            ARCADE.Asteroids[i].draw();
             ARCADE.Asteroids[i].sprite.debug = mouseIsPressed;
+            ARCADE.Asteroids[i].draw();
         }
 
         for (let i in ARCADE.Aliens) {
-            ARCADE.Aliens[i].draw();
             ARCADE.Aliens[i].sprite.debug = mouseIsPressed;
+            ARCADE.Aliens[i].draw();
         }
         
 
@@ -119,14 +106,14 @@ function ARCADE_SCENE() {
         if (!deltaFrame) {
             deltaFrame = floor(random(150, 350));
         } else {
-            //console.log(ARCADE.Frame_Count - passedFrames, deltaFrame);
-            if (ARCADE.Frame_Count - passedFrames > deltaFrame) {
+            //console.log(frameCount - passedFrames, deltaFrame);
+            if (frameCount - passedFrames > deltaFrame) {
                 for (let i = 0; i < random(PHASE_DIF[0], PHASE_DIF[1]); i++) {
                     let asteroid_ = new ARCADE.Asteroid();
                     ARCADE.Asteroids.push(asteroid_);
                     ARCADE.Asteroids_S.push(asteroid_.sprite);
                 }
-                passedFrames = ARCADE.Frame_Count;
+                passedFrames = frameCount;
                 deltaFrame = false;
             }
             //console.log(Asteroids);
@@ -137,14 +124,14 @@ function ARCADE_SCENE() {
         if (!deltaFrame) {
             deltaFrame = floor(random(150, 300));
         } else {
-            //console.log(ARCADE.Frame_Count - passedFrames, deltaFrame);
+            //console.log(frameCount - passedFrames, deltaFrame);
 
             locations = [];
             for (let i = 0; i < GAME.COL; i++) {
                 locations.push(i);
             }
 
-            if (ARCADE.Frame_Count - passedFrames > deltaFrame) {
+            if (frameCount - passedFrames > deltaFrame) {
                 for (let i = 0; i < random(PHASE_DIF[0], PHASE_DIF[1]); i++) {
                     let x = (GAME.ROW + floor(random(2, 5))) * GAME.TILE_SIZE;
 
@@ -157,7 +144,7 @@ function ARCADE_SCENE() {
                     ARCADE.Aliens.push(alien_);
                     ARCADE.Aliens_S.push(alien_.sprite);
                 }
-                passedFrames = ARCADE.Frame_Count;
+                passedFrames = frameCount;
                 deltaFrame = false;
             }
             //console.log(Asteroids);
