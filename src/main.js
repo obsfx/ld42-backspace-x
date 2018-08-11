@@ -46,22 +46,23 @@ function ARCADE_SCENE() {
     frameCount = 0;
 
     this.enter = function() {
-        HUD.ARCADE.init();
         PLAYER = new ARCADE.Player();
+        HUD.ARCADE.init();
+        HUD.ARCADE.updateHP(PLAYER.hp, PLAYER.currentHp);
         WAVE_PHASE = true;
         PHASE_DIF = [3, 6];
         PHASE_CHANGE_TIME = 600;
     }
     
     this.keyPressed = function() {
-        if (GAME.PLAYER_CONTROLS.indexOf(key.toLowerCase()) > -1) {
-            PLAYER.controls(key.toLowerCase());
+        if (GAME.PLAYER_CONTROLS.indexOf(keyCode.toString()) > -1) {
+            PLAYER.controls(keyCode.toString());
         }
     }
 
     this.keyReleased = function() {
-        if (GAME.PLAYER_CONTROLS.indexOf(key.toLowerCase()) > -1) {
-            PLAYER.controls(key.toLowerCase());
+        if (GAME.PLAYER_CONTROLS.indexOf(keyCode.toString()) > -1) {
+            PLAYER.controls(keyCode.toString());
         }
     }
 
