@@ -9,10 +9,12 @@ function setup() {
     initObjects();
 
     TILE_MAP.init();
+    GAME.INIT_SPRITES();
 
     SM = new SceneManager();
 
     SM.addScene(ARCADE_SCENE);
+    SM.addScene(GAME_OVER);
     SM.showScene(ARCADE_SCENE);
 }
 
@@ -68,6 +70,7 @@ function ARCADE_SCENE() {
 
     this.draw = function() {
         background(GAME.BG_COLOR);
+        GAME.STARS.draw();
         /*console.log(ARCADE.Aliens.length, ARCADE.Aliens_S.length, "ALIEN");
         console.log(ARCADE.Asteroids.length, ARCADE.Asteroids_S.length, "Asteroids");*/
 
@@ -82,8 +85,6 @@ function ARCADE_SCENE() {
             generateAliens();
         }
 
-        PLAYER.draw();
-
         for (let i in ARCADE.Asteroids) {
             //ARCADE.Asteroids[i].sprite.debug = mouseIsPressed;
             ARCADE.Asteroids[i].draw();
@@ -92,6 +93,13 @@ function ARCADE_SCENE() {
         for (let i in ARCADE.Aliens) {
             //ARCADE.Aliens[i].sprite.debug = mouseIsPressed;
             ARCADE.Aliens[i].draw();
+        }
+
+        PLAYER.draw();
+
+        if (PLAYER.currentHp <= 0) {
+            HUD.ARCADE.delete();
+            SM.showScene(GAME_OVER);
         }
 
         //TILE_MAP.render();
@@ -108,7 +116,7 @@ function ARCADE_SCENE() {
         } else {
             //console.log(frameCount - passedFrames, deltaFrame);
             if (frameCount - passedFrames > deltaFrame) {
-                for (let i = 0; i < random(PHASE_DIF[0], PHASE_DIF[1]); i++) {
+                for (let i = 0; i < floor(random(PHASE_DIF[0], PHASE_DIF[1])); i++) {
                     let asteroid_ = new ARCADE.Asteroid();
                     ARCADE.Asteroids.push(asteroid_);
                 }
@@ -131,7 +139,7 @@ function ARCADE_SCENE() {
             }
 
             if (frameCount - passedFrames > deltaFrame) {
-                for (let i = 0; i < random(PHASE_DIF[0], PHASE_DIF[1]); i++) {
+                for (let i = 0; i < floor(random(PHASE_DIF[0], PHASE_DIF[1])); i++) {
                     let x = (GAME.ROW + floor(random(2, 5))) * GAME.TILE_SIZE;
 
                     let y_index = floor(random(0, locations.length));
@@ -150,7 +158,15 @@ function ARCADE_SCENE() {
     }
 }
 
+function GAME_OVER() {
+    this.enter = function() {
+        alert("OYUN BİTTİ BROM");
+    }
 
+    this.draw = function() {
+        background(0);
+    }
+}
 
 
 

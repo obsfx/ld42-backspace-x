@@ -43,6 +43,13 @@ let HUD = {
         set: function() {
             this.inithtml();
             this.con.innerHTML = this.html_doc;
+        },
+
+        delete: function() {
+            this.con.innerHTML = `
+                <div style="width: 480px; height: 45px; background-color: #000; margin: auto; color: #fff; font-family: 'teeny_tiny_pixlsregular'; line-height: 45px; box-sizing: border-box; padding-left: 10px; padding-right: 10px; font-size: 12px;">
+                </div>
+            `;
         }
     }
 }
