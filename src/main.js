@@ -31,8 +31,8 @@ function draw() {
 
 function ARCADE_SCENE() {
     let PLAYER;
-    let Asteroids = [];
-    //let Asteroids_S = new Group();
+    ARCADE.Asteroids = [];
+    ARCADE.Asteroids_S = new Group();
 
     this.enter = function() {
         PLAYER = new ARCADE.Player();
@@ -52,14 +52,21 @@ function ARCADE_SCENE() {
 
     this.draw = function() {
         background(GAME.BG_COLOR);
-        generateAsteroids();
-        PLAYER.draw();
 
-        for (let i in Asteroids) {
-            Asteroids[i].draw();
+        generateAsteroids();
+
+        PLAYER.draw();
+        PLAYER.bulletDraw();
+
+        for (let i in ARCADE.Asteroids) {
+            ARCADE.Asteroids[i].draw();
+            ARCADE.Asteroids[i].sprite.debug = mouseIsPressed;
         }
 
         //TILE_MAP.render();
+        if (mouseIsPressed) {
+            drawSprites();
+        }
     }
 
     let deltaFrame = false;
@@ -68,15 +75,17 @@ function ARCADE_SCENE() {
         if (!deltaFrame) {
             deltaFrame = floor(random(150, 350));
         } else {
-            console.log(frameCount - passedFrames, deltaFrame);
+            //console.log(frameCount - passedFrames, deltaFrame);
             if (frameCount - passedFrames > deltaFrame) {
                 for (let i = 0; i < random(2, 8); i++) {
-                    Asteroids.push(new ARCADE.Asteroid());
+                    let asteroid_ = new ARCADE.Asteroid();
+                    ARCADE.Asteroids.push(asteroid_);
+                    ARCADE.Asteroids_S.push(asteroid_.sprite);
                 }
                 passedFrames = frameCount;
                 deltaFrame = false;
             }
-            console.log(Asteroids);
+            //console.log(Asteroids);
         }
     }
 }
