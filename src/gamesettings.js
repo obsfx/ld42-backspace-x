@@ -3,7 +3,7 @@ const GAME = {
     ROW: 30,
     COL: 30,
     TILE_SIZE: 16,
-    PLAYER_CONTROLS: ["w", "a", "s", "d", " "]
+    PLAYER_CONTROLS: ["w", "a", "s", "d", " "],
 }
 
 GAME.RES = {
