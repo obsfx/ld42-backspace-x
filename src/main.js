@@ -6,11 +6,22 @@ function setup() {
     frameRate(60);
     noStroke();
 
-    SM = new SceneManager();
-    //SM.addScene(MENU_SCENE);
-    SM.addScene(GAME_SCENE);
+    initObjects();
 
-    SM.showScene( GAME_SCENE )
+    TILE_MAP.init();
+
+    SM = new SceneManager();
+
+    SM.addScene(ARCADE_SCENE);
+    SM.showScene(ARCADE_SCENE);
+}
+
+function keyPressed() {
+    SM.handleEvent("keyPressed");
+}
+
+function keyReleased() {
+    SM.handleEvent("keyReleased");
 }
 
 function draw() {
@@ -18,8 +29,37 @@ function draw() {
     SM.draw();
 }
 
-function keyPressed()
-{
+function ARCADE_SCENE() {
+    let PLAYER;
+    this.enter = function() {
+        PLAYER = new ARCADE.Player();
+    }
+    
+    this.keyPressed = function() {
+        if (GAME.PLAYER_CONTROLS.indexOf(key) > -1) {
+            PLAYER.controls(key);
+        }
+    }
+
+    this.keyReleased = function() {
+        if (GAME.PLAYER_CONTROLS.indexOf(key) > -1) {
+            PLAYER.controls(key);
+        }
+    }
+
+    this.draw = function() {
+        background(GAME.BG_COLOR);
+        PLAYER.draw();
+        //TILE_MAP.render();
+    }
+}
+
+
+
+
+
+
+// -------------------------------
     /*// You can optionaly handle the key press at global level...
     switch(key)
     {
@@ -31,7 +71,6 @@ function keyPressed()
             break;
     }*/
 
-}
 /*
 function MENU_SCENE() {
 
@@ -44,13 +83,3 @@ function MENU_SCENE() {
     }
 }
 */
-
-function GAME_SCENE() {
-    this.enter = function() {
-        alert("GAME EXECUTED");
-    }
-
-    this.draw = function() {
-        background(GAME.BG_COLOR + 5);
-    }
-}

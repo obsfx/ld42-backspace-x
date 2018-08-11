@@ -10,15 +10,13 @@
         <style>
             body {
                 background-color: #f1f1f1;
+                padding-bottom: 100px;
             }
 
             canvas {
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                -webkit-transform: translate(-50%, -50%);
-                -moz-transform: translate(-50%, -50%);
+                display: block;
+                position: relative;
+                margin: auto;
             }
 
             .info {
@@ -46,6 +44,7 @@
         <script src="src/gamesettings.js"></script>
         <script src="src/objects.js"></script>
         <script src="src/collisions.js"></script>
+        <script src="src/tilemap.js"></script>
         <script src="src/main.js"></script>
     </body>
 </html>
