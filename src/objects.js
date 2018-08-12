@@ -208,41 +208,6 @@ function initObjects() {
                 } else {
                     this.bullets[i].draw();
                 }
-                
-
-                /*
-                TRASH CODE
-                this.bullets[i].sprite.overlap(ARCADE.Meteors_S, function(collector, collected) {
-
-                    let index = ARCADE.Meteors_S.indexOf(collected);
-                    ARCADE.Meteors[index].hpbarshowcd = 80;
-
-                    if (!ARCADE.Meteors[index].hit()) {
-                        this_.score += ARCADE.Meteors[index].point;
-
-                        HUD.ARCADE.updatePoint(this_.score);
-
-                        ARCADE.Meteors.splice(index, 1);
-                        ARCADE.Meteors_S.splice(index, 1);
-                    }
-                    
-                    bulletCollide = true;
-                });
-                this.bullets[i].sprite.overlap(ARCADE.Aliens_S, function(collector, collected) {
-                    let index = ARCADE.Aliens_S.indexOf(collected);
-                    ARCADE.Aliens[index].hpbarshowcd = 80;
-
-                    if (!ARCADE.Aliens[index].hit()) {
-                        this_.score += ARCADE.Aliens[index].point;
-
-                        HUD.ARCADE.updatePoint(this_.score);
-
-                        ARCADE.Aliens.splice(index, 1);
-                        ARCADE.Aliens_S.splice(index, 1);
-                    }
-                    
-                    bulletCollide = true;
-                });*/
 
             }
         }
@@ -250,19 +215,25 @@ function initObjects() {
 
     ARCADE.Player.prototype.shoot = function() {
         if (!this.fired) {
-            this.bullets.push(new ARCADE.Bullet(this.pos.x + this.w / 2, this.pos.y + this.h / 2 + 10, this.bulletMovement, this.dmg));
+            this.bullets.push(new ARCADE.Bullet(this.pos.x + this.w / 2, this.pos.y + this.h / 2 + 10, this.bulletMovement, this.dmg, this.upgrades.weapon));
             this.fired = true;
             this.firedFrame = frameCount;
         }
     }
 
     //Bullets
-    ARCADE.Bullet = function(x, y, d, dmg) {
+    ARCADE.Bullet = function(x, y, d, dmg, type) {
         this.pos = createVector(x, y);
         this.w = 20;
         this.h = 5;
         this.dmg = dmg
         this.vel = d;
+
+        if (type == "A") {
+            this.img = GAME.ALIEN_BULLET;
+        } else {
+            this.img = GAME.WEAPON_SPRITES[type];
+        }
     }
 
     ARCADE.Bullet.prototype.update = function() {
@@ -271,8 +242,10 @@ function initObjects() {
 
     ARCADE.Bullet.prototype.draw = function() {
         this.update();
-        fill(0,0, 255);
-        rect(this.pos.x, this.pos.y, this.w, this.h);
+        /*fill(0,0, 255);
+        rect(this.pos.x, this.pos.y, this.w, this.h);*/
+        imageMode(CORNER);
+        image(this.img, this.pos.x, this.pos.y, this.w, this.h);
     }
 
 
@@ -391,14 +364,16 @@ function initObjects() {
             return false;
         this.shoot();
         this.bulletDraw();
-        fill(0, 0, 255);
-        rect(this.pos.x, this.pos.y, this.w, this.h);
+        imageMode(CORNER);
+        image(GAME.ALIEN_SPRITE, this.pos.x, this.pos.y, this.w, this.h);
+        /*fill(0, 0, 255);
+        rect(this.pos.x, this.pos.y, this.w, this.h);*/
         this.HPBar();
     }
 
     ARCADE.Alien.prototype.shoot = function() {
         if (!this.fired) {
-            this.bullets.push(new ARCADE.Bullet(this.pos.x, this.pos.y + this.h / 2, -this.bulletMovement, this.dmg));
+            this.bullets.push(new ARCADE.Bullet(this.pos.x, this.pos.y + this.h / 2, -this.bulletMovement, this.dmg, "A"));
             this.fired = true;
             this.firedFrame = frameCount;
         }
