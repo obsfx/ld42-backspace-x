@@ -1,15 +1,15 @@
 let SM;
-// -> drawSprites();
-// -> collisions(); (MAYBE WEBGL AND LIGHTNING)
+
+function preload() {
+    GAME.INIT_SPRITES();
+}
+
 function setup() {
     createCanvas(GAME.RES.WIDTH, GAME.RES.HEIGHT);
     frameRate(60);
     noStroke();
 
     initObjects();
-
-    TILE_MAP.init();
-    GAME.INIT_SPRITES();
 
     SM = new SceneManager();
 
@@ -104,10 +104,14 @@ function ARCADE_SCENE() {
             SM.showScene(GAME_OVER);
         }
 
-        //TILE_MAP.render();
-        /*if (mouseIsPressed) {
-            drawSprites();
-        }*/
+        if (frameCount % 60 == 0) {
+            GAME.SCORE += 1;
+            HUD.ARCADE.updateScore(GAME.SCORE);
+        }
+
+        if (!GAME.MUSIC.isPlaying()) {
+            GAME.MUSIC.play();
+        }
     }
 
     let deltaFrame = false;

@@ -5,6 +5,7 @@ let HUD = {
         con: null,
         index: 0,
         html_doc: null,
+        score: 0,
         init: function() {
             let con_ = document.createElement("div");
             con_.setAttribute("id", "hud_arcade");
@@ -18,8 +19,9 @@ let HUD = {
         inithtml: function() {
             this.html_doc = `
                 <div style="width: 550px; height: 65px; background-color: #0c0c0c; margin: auto; color: #fff; font-family: 'teeny_tiny_pixlsregular'; line-height: 45px; box-sizing: border-box; padding-left: 10px; padding-right: 10px; font-size: 12px;">
-                    <div style="width: 160px; float: left; box-sizing: border-box; padding-left: 5px; padding-right: 5px;">
-                        SCRAPS: ${this.point} 
+                    <div style="width: 160px; float: left; box-sizing: border-box; padding-left: 5px; padding-right: 5px; line-height: 25px; margin-top: -5px;">
+                        <div>SCRAPS: ${this.point} </div>
+                        <div>SCORE: ${this.score} </div>
                     </div>
 
                     <div style="width: 180px; float: left; box-sizing: border-box; padding-left: 5px; padding-right: 5px; margin-top: -15px;">
@@ -72,6 +74,11 @@ let HUD = {
 
         updateWeapon: function(i) {
             this.index = i;
+            this.set();
+        },
+
+        updateScore: function(s) {
+            this.score = s;
             this.set();
         },
 

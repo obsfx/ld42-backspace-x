@@ -3,11 +3,13 @@ const GAME = {
     ROW: 30,
     COL: 30,
     TILE_SIZE: 16,
+    SCORE: 0,
     PLAYER_SPRITES: [],
     METEOR_SPRITE: null,
     ALIEN_SPRITE: null,
     ALIEN_BULLET: null,
     WEAPON_SPRITES: [],
+    MUSIC: null,
     PLAYER_CONTROLS: ["87", "65", "83", "68", "32"],
     WEAPONS: [
         {dmg:1, s: 10, fr: 20},
@@ -36,6 +38,9 @@ GAME.INIT_SPRITES = function() {
     for (var i = 1; i < 6; i++) {
         GAME.WEAPON_SPRITES.push(loadImage("assets/w" + i +".png"));
     }
+
+    GAME.MUSIC = loadSound("assets/bg_music_c.mp3");
+    GAME.MUSIC.setVolume(0.4);
 }
 
 GAME.STARS = {

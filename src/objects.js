@@ -31,7 +31,7 @@ function initObjects() {
         this.hp = GAME.HEALTH[this.upgrades.healt];
         this.currentHp = this.hp;
         
-        this.score = 3000;
+        this.score = 0;
 
         this.canTakeDmg = true;
         this.defaultctdCD = 150;
