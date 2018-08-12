@@ -30,8 +30,9 @@ function draw() {
     background(GAME.BG_COLOR);
     SM.draw();
 }
+
+let PLAYER;
 function ARCADE_SCENE() {
-    let PLAYER;
     
     let WAVE_PHASE;
     let PHASE_DIF;
@@ -51,6 +52,7 @@ function ARCADE_SCENE() {
         PLAYER = new ARCADE.Player();
         HUD.ARCADE.init();
         HUD.ARCADE.updateHP(PLAYER.hp, PLAYER.currentHp);
+        HUD.ARCADE.updateWeapon(PLAYER.upgrades.weapon);
         WAVE_PHASE = true;
         PHASE_DIF = [3, 6];
         PHASE_CHANGE_TIME = 600;
@@ -169,36 +171,20 @@ function GAME_OVER() {
 }
 
 
-
-
-// -------------------------------
-    /*// You can optionaly handle the key press at global level...
-    switch(key)
-    {
-        case '1':
-            SM.showScene( MENU_SCENE );
-            break;
-        case '2':
-            SM.showScene( GAME_SCENE );
-            break;
-    }*/
-
-/*
-function MENU_SCENE() {
-
-    this.enter = function() {
-        alert("MAIN MENU EXECUTED");
-    }
-
-    this.draw = function() {
-        background(GAME.BG_COLOR - 5);
-    }
-}
-*/
-
-
+let pPressed = false; // 80
 window.addEventListener("keydown", function(e) {
     if (e.keyCode == 32) {
         e.preventDefault();
+    }
+
+    if (e.keyCode == 80 && !pPressed) {
+        pPressed = true;
+        PLAYER.upgrade();
+    }
+});
+
+window.addEventListener("keyup", function(e) {
+    if (e.keyCode == 80) {
+        pPressed = false;
     }
 });

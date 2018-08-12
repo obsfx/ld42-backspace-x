@@ -10,7 +10,11 @@ const GAME = {
     WEAPON_SPRITES: [],
     PLAYER_CONTROLS: ["87", "65", "83", "68", "32"],
     WEAPONS: [
-        {dmg:1, s: 10, fr: 20}
+        {dmg:1, s: 10, fr: 20},
+        {dmg:1.2, s: 10, fr: 20.5, cost: 100},
+        {dmg:1.5, s: 10.5, fr: 20.8, cost: 300},
+        {dmg:1.8, s: 11, fr: 21, cost: 550},
+        {dmg:2.5, s: 10, fr: 22, cost: 800},
     ],
     HEALTH: [100],
 }
@@ -28,7 +32,10 @@ GAME.INIT_SPRITES = function() {
     GAME.METEOR_SPRITE = loadImage("assets/meteor.png");
     GAME.ALIEN_SPRITE = loadImage("assets/alien_ship.png");
     GAME.ALIEN_BULLET = loadImage("assets/alien_bullet.png");
-    GAME.WEAPON_SPRITES.push(loadImage("assets/w1.png"));
+
+    for (var i = 1; i < 6; i++) {
+        GAME.WEAPON_SPRITES.push(loadImage("assets/w" + i +".png"));
+    }
 }
 
 GAME.STARS = {

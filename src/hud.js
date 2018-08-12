@@ -3,6 +3,7 @@ let HUD = {
         point: 0,
         hp: 0,
         con: null,
+        index: 0,
         html_doc: null,
         init: function() {
             let con_ = document.createElement("div");
@@ -16,14 +17,27 @@ let HUD = {
 
         inithtml: function() {
             this.html_doc = `
-                <div style="width: 480px; height: 45px; background-color: #0c0c0c; margin: auto; color: #fff; font-family: 'teeny_tiny_pixlsregular'; line-height: 45px; box-sizing: border-box; padding-left: 10px; padding-right: 10px; font-size: 12px;">
+                <div style="width: 550px; height: 65px; background-color: #0c0c0c; margin: auto; color: #fff; font-family: 'teeny_tiny_pixlsregular'; line-height: 45px; box-sizing: border-box; padding-left: 10px; padding-right: 10px; font-size: 12px;">
                     <div style="width: 160px; float: left; box-sizing: border-box; padding-left: 5px; padding-right: 5px;">
-                        Scraps: ${this.point} 
+                        SCRAPS: ${this.point} 
                     </div>
 
-                    <div style="width: 160px; float: left; box-sizing: border-box; padding-left: 5px; padding-right: 5px;">
+                    <div style="width: 180px; float: left; box-sizing: border-box; padding-left: 5px; padding-right: 5px; margin-top: -15px;">
                         HP: <div style="width: 70px; height: 20px; background-image: url('assets/hpbar.png'); display: inline-block; margin-top: -3px; vertical-align: middle;">
-                        <div style="background-color: red; width: ${this.hp}px; height: 16px; margin: 2px; 2px;"></div>
+                        <div style="background-color: #d80041; width: ${this.hp}px; height: 16px; margin: 2px; 2px;"></div>
+                        </div>
+                        <div style="font-size: 10px; margin-top: -10px; line-height: 15px">CURRENT WEAPON: <img src="assets/wc${(this.index + 1)}.png" width="32px" height="32px" style="vertical-align: middle; margin-left: -5px;"></div>
+                        <div style="font-size: 8px; margin-top: -5px; line-height: 15px">DAMAGE: ${(GAME.WEAPONS[this.index].dmg * 40)}</div>
+                    </div>
+
+                    <div style="width: 180px; float: left; box-sizing: border-box; padding-left: 5px; padding-right: 5px; font-size: 10px; line-height: 15px">
+                        <div>PRESS P FOR UPGRADE</div>
+                        <div style="margin-top: 5px;">
+                            <img src="assets/wc${(this.index + 2)}.png" width="32px" height="32px" style="float: left; margin-top: 2px;">
+                            <div style="vertical-align: middle; display: inline-block; margin-left: 10px; line-height: 20px;">
+                                <div>${GAME.WEAPONS[this.index + 1].cost} SCRAPS</div>
+                                <div style="font-size: 8px;">DAMAGE: ${(GAME.WEAPONS[this.index + 1].dmg) * 40}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -37,6 +51,11 @@ let HUD = {
 
         updateHP: function(p, k) {
             this.hp = (66 / p) * k;
+            this.set();
+        },
+
+        updateWeapon: function(i) {
+            this.index = i;
             this.set();
         },
 

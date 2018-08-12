@@ -221,6 +221,10 @@ function initObjects() {
         }
     }
 
+    ARCADE.Player.prototype.upgrade = function() {
+        console.log("lol");
+    }
+
     //Bullets
     ARCADE.Bullet = function(x, y, d, dmg, type) {
         this.pos = createVector(x, y);
