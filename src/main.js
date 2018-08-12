@@ -257,7 +257,7 @@ function GAME_OVER() {
 
         textSize(16);
         fill(255,236,39);
-        text("THANK YOU FOR PLAYED THIS GAME !", width / 2, 295);
+        text("THANK YOU FOR PLAYING THIS GAME !", width / 2, 295);
         text("YOU CAN PRESS [ R ] TO PLAY AGAIN", width / 2, 325);
     }
 
