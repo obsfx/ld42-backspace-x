@@ -1,6 +1,6 @@
 let SM;
 // -> drawSprites();
-// -> collisions();
+// -> collisions(); (MAYBE WEBGL AND LIGHTNING)
 function setup() {
     createCanvas(GAME.RES.WIDTH, GAME.RES.HEIGHT);
     frameRate(60);
@@ -30,17 +30,17 @@ function draw() {
     background(GAME.BG_COLOR);
     SM.draw();
 }
-
 function ARCADE_SCENE() {
+    let PLAYER;
+    
     let WAVE_PHASE;
     let PHASE_DIF;
     let PHASE_CHANGE_TIME;
-    let PLAYER;
 
     let locations = [];
 
-    ARCADE.Asteroids = [];
-    //ARCADE.Asteroids_S = new Group();
+    ARCADE.Meteors = [];
+    //ARCADE.Meteors_S = new Group();
 
     ARCADE.Aliens = [];
     //ARCADE.Aliens_S = new Group();
@@ -72,7 +72,7 @@ function ARCADE_SCENE() {
         background(GAME.BG_COLOR);
         GAME.STARS.draw();
         /*console.log(ARCADE.Aliens.length, ARCADE.Aliens_S.length, "ALIEN");
-        console.log(ARCADE.Asteroids.length, ARCADE.Asteroids_S.length, "Asteroids");*/
+        console.log(ARCADE.Meteors.length, ARCADE.Meteors_S.length, "Meteors");*/
 
         if (frameCount % PHASE_CHANGE_TIME == 0) {
             WAVE_PHASE = !WAVE_PHASE
@@ -80,14 +80,14 @@ function ARCADE_SCENE() {
         }
 
         if (WAVE_PHASE) {
-            generateAsteroids();
+            generateMeteors();
         } else {
             generateAliens();
         }
 
-        for (let i in ARCADE.Asteroids) {
-            //ARCADE.Asteroids[i].sprite.debug = mouseIsPressed;
-            ARCADE.Asteroids[i].draw();
+        for (let i in ARCADE.Meteors) {
+            //ARCADE.Meteors[i].sprite.debug = mouseIsPressed;
+            ARCADE.Meteors[i].draw();
         }
 
         for (let i in ARCADE.Aliens) {
@@ -110,20 +110,20 @@ function ARCADE_SCENE() {
 
     let deltaFrame = false;
     let passedFrames = 0;
-    function generateAsteroids() {
+    function generateMeteors() {
         if (!deltaFrame) {
             deltaFrame = floor(random(150, 350));
         } else {
             //console.log(frameCount - passedFrames, deltaFrame);
             if (frameCount - passedFrames > deltaFrame) {
                 for (let i = 0; i < floor(random(PHASE_DIF[0], PHASE_DIF[1])); i++) {
-                    let asteroid_ = new ARCADE.Asteroid();
-                    ARCADE.Asteroids.push(asteroid_);
+                    let Meteor_ = new ARCADE.Meteor();
+                    ARCADE.Meteors.push(Meteor_);
                 }
                 passedFrames = frameCount;
                 deltaFrame = false;
             }
-            //console.log(Asteroids);
+            //console.log(Meteors);
         }
     }
 
@@ -153,7 +153,7 @@ function ARCADE_SCENE() {
                 passedFrames = frameCount;
                 deltaFrame = false;
             }
-            //console.log(Asteroids);
+            //console.log(Meteors);
         }
     }
 }
@@ -195,3 +195,10 @@ function MENU_SCENE() {
     }
 }
 */
+
+
+window.addEventListener("keydown", function(e) {
+    if (e.keyCode == 32) {
+        e.preventDefault();
+    }
+});

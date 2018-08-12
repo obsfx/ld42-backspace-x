@@ -49,7 +49,8 @@ function initObjects() {
     }
 
     ARCADE.Player.prototype.takedDmg = function(dmg) {
-        this.currentHp += -dmg;
+        /*------------------------------------------------------------------- */
+        //this.currentHp += -dmg;
         HUD.ARCADE.updateHP(this.hp, this.currentHp);
         this.canTakeDmg = false;
         this.blink = true;
@@ -73,10 +74,10 @@ function initObjects() {
         }
 
         if (this.canTakeDmg) {
-            for (var i in ARCADE.Asteroids) {
-                let col = collideRectCircle(this.pos.x, this.pos.y, this.w, this.h, ARCADE.Asteroids[i].pos.x, ARCADE.Asteroids[i].pos.y, ARCADE.Asteroids[i].size);
+            for (var i in ARCADE.Meteors) {
+                let col = collideRectCircle(this.pos.x, this.pos.y, this.w, this.h, ARCADE.Meteors[i].pos.x, ARCADE.Meteors[i].pos.y, ARCADE.Meteors[i].size);
                 if (col) {
-                    this.takedDmg(ARCADE.Asteroids[i].dmg);
+                    this.takedDmg(ARCADE.Meteors[i].dmg);
                     break;
                 }
             }
@@ -150,6 +151,7 @@ function initObjects() {
             }
         }
 
+        imageMode(CORNER);
         image(GAME.PLAYER_SPRITES[this.currentAnim], this.pos.x, this.pos.y, this.w, this.h);
     }
 
@@ -161,18 +163,18 @@ function initObjects() {
 
                 let bulletCollide = false;
 
-                for (var j in ARCADE.Asteroids) {
-                    let p = collideRectCircle(this.bullets[i].pos.x, this.bullets[i].pos.y, this.bullets[i].w, this.bullets[i].h, ARCADE.Asteroids[j].pos.x, ARCADE.Asteroids[j].pos.y, ARCADE.Asteroids[j].size);
+                for (var j in ARCADE.Meteors) {
+                    let p = collideRectCircle(this.bullets[i].pos.x, this.bullets[i].pos.y, this.bullets[i].w, this.bullets[i].h, ARCADE.Meteors[j].pos.x, ARCADE.Meteors[j].pos.y, ARCADE.Meteors[j].size);
                     if (p) {
 
-                        ARCADE.Asteroids[j].hpbarshowcd = 80;
+                        ARCADE.Meteors[j].hpbarshowcd = 80;
 
-                        if (!ARCADE.Asteroids[j].hit(this.bullets[i].dmg)) {
-                            this.score += ARCADE.Asteroids[j].point;
+                        if (!ARCADE.Meteors[j].hit(this.bullets[i].dmg)) {
+                            this.score += ARCADE.Meteors[j].point;
     
                             HUD.ARCADE.updatePoint(this.score);
     
-                            ARCADE.Asteroids.splice(j, 1);
+                            ARCADE.Meteors.splice(j, 1);
                         }
 
                         bulletCollide = true;
@@ -210,18 +212,18 @@ function initObjects() {
 
                 /*
                 TRASH CODE
-                this.bullets[i].sprite.overlap(ARCADE.Asteroids_S, function(collector, collected) {
+                this.bullets[i].sprite.overlap(ARCADE.Meteors_S, function(collector, collected) {
 
-                    let index = ARCADE.Asteroids_S.indexOf(collected);
-                    ARCADE.Asteroids[index].hpbarshowcd = 80;
+                    let index = ARCADE.Meteors_S.indexOf(collected);
+                    ARCADE.Meteors[index].hpbarshowcd = 80;
 
-                    if (!ARCADE.Asteroids[index].hit()) {
-                        this_.score += ARCADE.Asteroids[index].point;
+                    if (!ARCADE.Meteors[index].hit()) {
+                        this_.score += ARCADE.Meteors[index].point;
 
                         HUD.ARCADE.updatePoint(this_.score);
 
-                        ARCADE.Asteroids.splice(index, 1);
-                        ARCADE.Asteroids_S.splice(index, 1);
+                        ARCADE.Meteors.splice(index, 1);
+                        ARCADE.Meteors_S.splice(index, 1);
                     }
                     
                     bulletCollide = true;
@@ -248,7 +250,7 @@ function initObjects() {
 
     ARCADE.Player.prototype.shoot = function() {
         if (!this.fired) {
-            this.bullets.push(new ARCADE.Bullet(this.pos.x + this.w / 2, this.pos.y + this.h / 2 + 12, this.bulletMovement, this.dmg));
+            this.bullets.push(new ARCADE.Bullet(this.pos.x + this.w / 2, this.pos.y + this.h / 2 + 10, this.bulletMovement, this.dmg));
             this.fired = true;
             this.firedFrame = frameCount;
         }
@@ -274,12 +276,15 @@ function initObjects() {
     }
 
 
-    //Asteroids
-    ARCADE.Asteroid = function() {
+    //Meteors
+    ARCADE.Meteor = function() {
         this.t = floor(random(1, 5));
         this.size = this.t * 25;
         this.pos = createVector(random(width, random(width + this.size + 20, width + this.size + 100)), random(50, height - 50));
         this.hp = this.t * 2;
+        this.currentAngel = random(0, 360);
+        this.rotate = floor(random(2, 5));
+        this.rotation = 0;
         this.hpbarw = 50,
         this.hpbarh = 5;
         this.hpbarshowcd = 0;
@@ -288,30 +293,44 @@ function initObjects() {
         this.movement = createVector( -random(0.5, 2), random(-0.5, 0.5));
     }
 
-    ARCADE.Asteroid.prototype.update = function() {
+    ARCADE.Meteor.prototype.update = function() {
         this.pos.add(this.movement);  
 
         if (this.pos.x + this.size / 2 < 0) {
-            let index = ARCADE.Asteroids.indexOf(this);
+            let index = ARCADE.Meteors.indexOf(this);
 
-            ARCADE.Asteroids.splice(index, 1);
-            //console.log(ARCADE.Asteroids.length);
+            ARCADE.Meteors.splice(index, 1);
+            //console.log(ARCADE.Meteors.length);
             
             return false;
         }
 
+        if (this.currentAngel + this.rotate < 360) {
+            this.currentAngel += this.rotate;
+        } else {
+            this.currentAngel = (360 - this.currentAngel) + this.rotate;
+        }
+
+        
+        this.rotation = this.currentAngel * Math.PI / 180;
     }
 
-    ARCADE.Asteroid.prototype.draw = function() {
+    ARCADE.Meteor.prototype.draw = function() {
         if (this.update() == false)
             return false;
 
-        fill(0, 255, 0);
-        ellipse(this.pos.x, this.pos.y, this.size, this.size);
+        push();
+        translate(this.pos.x, this.pos.y);
+        rotate(this.rotation);
+        //ellipse(0, 0, this.size, this.size);
+        imageMode(CENTER);
+        image(GAME.METEOR_SPRITE, 0, 0, this.size, this.size);
+        pop();
+
         this.HPBar();
     }
 
-    ARCADE.Asteroid.prototype.HPBar = function() {
+    ARCADE.Meteor.prototype.HPBar = function() {
         if (this.hpbarshowcd > 0) {
             fill(255, 0, 0);
             rect(this.pos.x - this.size / 2, this.pos.y - this.hpbarh / 2, (this.hpbarw / (this.t * 2)) * this.hp, this.hpbarh);
@@ -319,7 +338,7 @@ function initObjects() {
         }
     }
 
-    ARCADE.Asteroid.prototype.hit = function(dmg) {
+    ARCADE.Meteor.prototype.hit = function(dmg) {
         if (this.hp - dmg > 0) {
             this.hp -= dmg;
             return true;
