@@ -11,10 +11,10 @@ const GAME = {
     PLAYER_CONTROLS: ["87", "65", "83", "68", "32"],
     WEAPONS: [
         {dmg:1, s: 10, fr: 20},
-        {dmg:1.2, s: 10, fr: 20.5, cost: 100},
-        {dmg:1.5, s: 10.5, fr: 20.8, cost: 300},
-        {dmg:1.8, s: 11, fr: 21, cost: 550},
-        {dmg:2.5, s: 10, fr: 22, cost: 800},
+        {dmg:1.3, s: 12, fr: 18, cost: 100},
+        {dmg:1.8, s: 13, fr: 17, cost: 300},
+        {dmg:2.2, s: 13.5, fr: 15, cost: 550},
+        {dmg:2.5, s: 15, fr: 10, cost: 800},
     ],
     HEALTH: [100],
 }

@@ -31,7 +31,7 @@ function initObjects() {
         this.hp = GAME.HEALTH[this.upgrades.healt];
         this.currentHp = this.hp;
         
-        this.score = 0;
+        this.score = 3000;
 
         this.canTakeDmg = true;
         this.defaultctdCD = 150;
@@ -222,7 +222,18 @@ function initObjects() {
     }
 
     ARCADE.Player.prototype.upgrade = function() {
-        console.log("lol");
+        if (this.upgrades.weapon < GAME.WEAPONS.length - 1) {
+            if (GAME.WEAPONS[this.upgrades.weapon + 1].cost <= this.score) {
+                this.score += -GAME.WEAPONS[this.upgrades.weapon + 1].cost;
+                this.upgrades.weapon += 1;
+                this.bulletMovement = GAME.WEAPONS[this.upgrades.weapon].s;
+                this.dmg = GAME.WEAPONS[this.upgrades.weapon].dmg;
+                this.fireRate = GAME.WEAPONS[this.upgrades.weapon].fr;
+
+                HUD.ARCADE.updateWeapon(this.upgrades.weapon);
+
+            }
+        }
     }
 
     //Bullets

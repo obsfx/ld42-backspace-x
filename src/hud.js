@@ -29,8 +29,11 @@ let HUD = {
                         <div style="font-size: 10px; margin-top: -10px; line-height: 15px">CURRENT WEAPON: <img src="assets/wc${(this.index + 1)}.png" width="32px" height="32px" style="vertical-align: middle; margin-left: -5px;"></div>
                         <div style="font-size: 8px; margin-top: -5px; line-height: 15px">DAMAGE: ${(GAME.WEAPONS[this.index].dmg * 40)}</div>
                     </div>
+            `;
 
-                    <div style="width: 180px; float: left; box-sizing: border-box; padding-left: 5px; padding-right: 5px; font-size: 10px; line-height: 15px">
+            if (this.index != GAME.WEAPONS.length - 1) {
+                this.html_doc += `
+                        <div style="width: 180px; float: left; box-sizing: border-box; padding-left: 5px; padding-right: 5px; font-size: 10px; line-height: 15px">
                         <div>PRESS P FOR UPGRADE</div>
                         <div style="margin-top: 5px;">
                             <img src="assets/wc${(this.index + 2)}.png" width="32px" height="32px" style="float: left; margin-top: 2px;">
@@ -41,7 +44,20 @@ let HUD = {
                         </div>
                     </div>
                 </div>
-            `;
+                `;
+            } else {
+                this.html_doc += `
+                        <div style="width: 180px; float: left; box-sizing: border-box; padding-left: 5px; padding-right: 5px; font-size: 10px; line-height: 15px">
+                        <div>----------------</div>
+                        <div style="margin-top: 5px;">
+                            <div style="vertical-align: middle; display: inline-block; margin-left: 10px; line-height: 20px;">
+                                <div>ALL UPGRADES UNLOECKED!</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }
         },
 
         updatePoint: function(p) {
