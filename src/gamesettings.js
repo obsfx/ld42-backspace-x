@@ -8,16 +8,11 @@ const GAME = {
     ALIEN_SPRITE: null,
     ALIEN_BULLET: null,
     WEAPON_SPRITES: [],
-
     PLAYER_CONTROLS: ["87", "65", "83", "68", "32"],
     WEAPONS: [
         {dmg:1, s: 10, fr: 20}
     ],
     HEALTH: [100],
-}
-
-GAME.LOAD_IMAGE = function(url) {
-    
 }
 
 GAME.RES = {
@@ -27,13 +22,13 @@ GAME.RES = {
 
 GAME.INIT_SPRITES = function() {
     for (var i = 1; i < 6; i++) {
-        GAME.PLAYER_SPRITES.push(loadImage("../assets/P-000" + i + ".png"));
+        GAME.PLAYER_SPRITES.push(loadImage("assets/P-000" + i + ".png"));
     }
 
-    GAME.METEOR_SPRITE = loadImage("../assets/meteor.png");
-    GAME.ALIEN_SPRITE = loadImage("../assets/alien_ship.png");
-    GAME.ALIEN_BULLET = loadImage("../assets/alien_bullet.png");
-    GAME.WEAPON_SPRITES.push(loadImage("../assets/w1.png"));
+    GAME.METEOR_SPRITE = loadImage("assets/meteor.png");
+    GAME.ALIEN_SPRITE = loadImage("assets/alien_ship.png");
+    GAME.ALIEN_BULLET = loadImage("assets/alien_bullet.png");
+    GAME.WEAPON_SPRITES.push(loadImage("assets/w1.png"));
 }
 
 GAME.STARS = {
