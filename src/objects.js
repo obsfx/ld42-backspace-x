@@ -129,6 +129,7 @@ function initObjects() {
         }
 
         if (this.currentHp <= 0) {
+            GAME.MUSIC.stop();
             HUD.ARCADE.delete();
             GAME.STATUS = "G"
             SM.showScene(GAME_OVER);
