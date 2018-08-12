@@ -1,7 +1,7 @@
 let SM;
 
 function preload() {
-    GAME.INIT_SPRITES();
+    GAME.INIT_SOURCES();
 }
 
 function setup() {
@@ -15,9 +15,10 @@ function setup() {
 
     SM = new SceneManager();
 
+    SM.addScene(COVER_SCENE);
     SM.addScene(ARCADE_SCENE);
     SM.addScene(GAME_OVER);
-    SM.showScene(ARCADE_SCENE);
+    SM.showScene(COVER_SCENE);
 }
 
 function keyPressed() {
@@ -31,6 +32,24 @@ function keyReleased() {
 function draw() {
     background(GAME.BG_COLOR);
     SM.draw();
+}
+
+
+function COVER_SCENE() {
+    this.draw = function() {
+        image(GAME.COVER, 0, 0, width, height);
+
+        textFont(GAME.COVER_FONT);
+        textSize(16);
+        fill(255,236,39);
+        text("PRESS [ P ] FOR START THE GAME", 90, 210);
+    }
+
+    this.keyPressed = function() {
+        if (keyCode == 80) {
+            SM.showScene(ARCADE_SCENE);
+        }
+    }
 }
 
 let PLAYER;

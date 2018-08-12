@@ -269,7 +269,7 @@ function initObjects() {
                 this.bulletMovement = GAME.WEAPONS[this.upgrades.weapon].s;
                 this.dmg = GAME.WEAPONS[this.upgrades.weapon].dmg;
                 this.fireRate = GAME.WEAPONS[this.upgrades.weapon].fr;
-
+                GAME.UPGRADE_SFX.play();
                 HUD.ARCADE.updatePoint(this.score);
                 HUD.ARCADE.updateWeapon(this.upgrades.weapon);
 
@@ -314,7 +314,7 @@ function initObjects() {
         this.currentAngel = random(0, 360);
         this.rotate = floor(random(2, 5));
         this.rotation = 0;
-        this.hpbarw = 50,
+        this.hpbarw = this.size,
         this.hpbarh = 5;
         this.hpbarshowcd = 0;
         this.dmg = this.t * 5;
@@ -361,7 +361,7 @@ function initObjects() {
 
     ARCADE.Meteor.prototype.HPBar = function() {
         if (this.hpbarshowcd > 0) {
-            fill(255, 0, 0);
+            fill(216,0,65);
             rect(this.pos.x - this.size / 2, this.pos.y - this.hpbarh / 2, (this.hpbarw / (this.t * 2)) * this.hp, this.hpbarh);
             this.hpbarshowcd -= 1;
         }
@@ -384,7 +384,7 @@ function initObjects() {
         this.t = floor(random(1, 4));
         this.dmg = this.t * 5;
         this.hp = this.t * 2;
-        this.hpbarw = 50,
+        this.hpbarw = this.w;
         this.hpbarh = 5;
         this.hpbarshowcd = 0;
         this.point = this.t * 3; 
@@ -448,7 +448,7 @@ function initObjects() {
 
     ARCADE.Alien.prototype.HPBar = function() {
         if (this.hpbarshowcd > 0) {
-            fill(255, 0, 0);
+            fill(216,0,65);
             rect(this.pos.x, this.pos.y + this.h / 2, (this.hpbarw / (this.t * 2)) * this.hp, this.hpbarh);
             this.hpbarshowcd -= 1;
         }

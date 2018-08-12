@@ -5,6 +5,8 @@ const GAME = {
     TILE_SIZE: 16,
     SCORE: 0,
     PLAYER_SPRITES: [],
+    COVER: null,
+    COVER_FONT: null,
     METEOR_SPRITE: null,
     ALIEN_SPRITE: null,
     ALIEN_BULLET: null,
@@ -32,7 +34,7 @@ GAME.RES = {
     HEIGHT: GAME.COL * GAME.TILE_SIZE
 }
 
-GAME.INIT_SPRITES = function() {
+GAME.INIT_SOURCES = function() {
     for (var i = 1; i < 6; i++) {
         GAME.PLAYER_SPRITES.push(loadImage("assets/P-000" + i + ".png"));
     }
@@ -45,11 +47,13 @@ GAME.INIT_SPRITES = function() {
         GAME.WEAPON_SPRITES.push(loadImage("assets/w" + i +".png"));
     }
 
+    GAME.COVER = loadImage("assets/cover.jpg");
+
     GAME.MUSIC = loadSound("assets/bg_music_c.mp3");
-    GAME.MUSIC.setVolume(0.4);
+    GAME.MUSIC.setVolume(0.6);
 
     GAME.UPGRADE_SFX = loadSound("assets/upgrade.wav");
-    GAME.UPGRADE_SFX.setVolume(0.5);
+    GAME.UPGRADE_SFX.setVolume(0.8);
 
     GAME.ALIEN_D_SFX = loadSound("assets/aliendead.wav");
     GAME.ALIEN_D_SFX.setVolume(0.5);
@@ -71,6 +75,8 @@ GAME.INIT_SPRITES = function() {
 
     GAME.METEOR_K_SFX = loadSound("assets/meteortd.wav");
     GAME.METEOR_K_SFX.setVolume(0.5);
+
+    GAME.COVER_FONT = loadFont("assets/font/teeny_tiny_pixls-webfont.ttf");
 }
 
 GAME.STARS = {
