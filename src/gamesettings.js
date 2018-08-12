@@ -10,6 +10,12 @@ const GAME = {
     ALIEN_BULLET: null,
     WEAPON_SPRITES: [],
     MUSIC: null,
+    UPGRADE_SFX: null,
+    ALIEN_D_SFX: null,
+    ALIEN_S_SFX: null,
+    PLAYER_S_SFX: null,
+    PLAYER_D_SFX: null,
+    METEOR_D_SFX: null,
     PLAYER_CONTROLS: ["87", "65", "83", "68", "32"],
     WEAPONS: [
         {dmg:1, s: 10, fr: 20},
@@ -41,6 +47,30 @@ GAME.INIT_SPRITES = function() {
 
     GAME.MUSIC = loadSound("assets/bg_music_c.mp3");
     GAME.MUSIC.setVolume(0.4);
+
+    GAME.UPGRADE_SFX = loadSound("assets/upgrade.wav");
+    GAME.UPGRADE_SFX.setVolume(0.5);
+
+    GAME.ALIEN_D_SFX = loadSound("assets/aliendead.wav");
+    GAME.ALIEN_D_SFX.setVolume(0.5);
+
+    GAME.ALIEN_S_SFX = loadSound("assets/alienfire.wav");
+    GAME.ALIEN_S_SFX.setVolume(0.5);
+
+    GAME.ALIEN_K_SFX = loadSound("assets/alientd.wav");
+    GAME.ALIEN_K_SFX.setVolume(0.5)
+
+    GAME.PLAYER_S_SFX = loadSound("assets/shoot.wav");
+    GAME.PLAYER_S_SFX.setVolume(0.5);
+
+    GAME.PLAYER_D_SFX = loadSound("assets/takedmg.wav");
+    GAME.PLAYER_D_SFX.setVolume(0.5);
+
+    GAME.METEOR_D_SFX = loadSound("assets/meteorex.wav");
+    GAME.METEOR_D_SFX.setVolume(0.5);
+
+    GAME.METEOR_K_SFX = loadSound("assets/meteortd.wav");
+    GAME.METEOR_K_SFX.setVolume(0.5);
 }
 
 GAME.STARS = {

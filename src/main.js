@@ -5,6 +5,8 @@ function preload() {
 }
 
 function setup() {
+    document.getElementById("status").style.display = "none";
+
     createCanvas(GAME.RES.WIDTH, GAME.RES.HEIGHT);
     frameRate(60);
     noStroke();
@@ -49,6 +51,8 @@ function ARCADE_SCENE() {
     frameCount = 0;
 
     this.enter = function() {
+        GAME.STATUS = "A";
+
         PLAYER = new ARCADE.Player();
         HUD.ARCADE.init();
         HUD.ARCADE.updateHP(PLAYER.hp, PLAYER.currentHp);
@@ -99,17 +103,12 @@ function ARCADE_SCENE() {
 
         PLAYER.draw();
 
-        if (PLAYER.currentHp <= 0) {
-            HUD.ARCADE.delete();
-            SM.showScene(GAME_OVER);
-        }
-
         if (frameCount % 60 == 0) {
             GAME.SCORE += 1;
             HUD.ARCADE.updateScore(GAME.SCORE);
         }
 
-        if (!GAME.MUSIC.isPlaying()) {
+        if (!GAME.MUSIC.isPlaying() && GAME.STATUS != "G") {
             GAME.MUSIC.play();
         }
     }

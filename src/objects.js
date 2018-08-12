@@ -50,7 +50,8 @@ function initObjects() {
 
     ARCADE.Player.prototype.takedDmg = function(dmg) {
         /*------------------------------------------------------------------- */
-        //this.currentHp += -dmg;
+        this.currentHp += -dmg;
+        GAME.PLAYER_D_SFX.play();
         HUD.ARCADE.updateHP(this.hp, this.currentHp);
         this.canTakeDmg = false;
         this.blink = true;
@@ -126,6 +127,12 @@ function initObjects() {
                 this.fired = false;
             }
         }
+
+        if (this.currentHp <= 0) {
+            HUD.ARCADE.delete();
+            GAME.STATUS = "G"
+            SM.showScene(GAME_OVER);
+        }
     }
 
     ARCADE.Player.prototype.draw = function() {
@@ -171,10 +178,26 @@ function initObjects() {
 
                         if (!ARCADE.Meteors[j].hit(this.bullets[i].dmg)) {
                             this.score += ARCADE.Meteors[j].point;
-    
+
+
+                            GAME.METEOR_D_SFX.play();
+
+                            GAME.SCORE += ARCADE.Meteors[j].point * 2;
+                            HUD.ARCADE.updateScore(GAME.SCORE);
+
                             HUD.ARCADE.updatePoint(this.score);
+
+                            if (this.currentHp < this.hp) {
+                                this.currentHp += ARCADE.Meteors[j].point * 0.5;
+                                if (this.currentHp > this.hp) {
+                                    this.currentHp = this.hp;
+                                }
+                                HUD.ARCADE.updateHP(this.hp, this.currentHp);
+                            }
     
                             ARCADE.Meteors.splice(j, 1);
+                        } else {
+                            GAME.METEOR_K_SFX.play();
                         }
 
                         bulletCollide = true;
@@ -191,10 +214,25 @@ function initObjects() {
     
                             if (!ARCADE.Aliens[j].hit(this.bullets[i].dmg)) {
                                 this.score += ARCADE.Aliens[j].point;
-        
+
+                                GAME.ALIEN_D_SFX.play();
+
+                                GAME.SCORE += ARCADE.Aliens[j].point * 2;
+                                HUD.ARCADE.updateScore(GAME.SCORE);
+
                                 HUD.ARCADE.updatePoint(this.score);
+
+                                if (this.currentHp < this.hp) {
+                                    this.currentHp += ARCADE.Aliens[j].point * 0.3;
+                                    if (this.currentHp > this.hp) {
+                                        this.currentHp = this.hp;
+                                    }
+                                    HUD.ARCADE.updateHP(this.hp, this.currentHp);
+                                }
         
                                 ARCADE.Aliens.splice(j, 1);
+                            } else {
+                                GAME.ALIEN_K_SFX.play();
                             }
     
                             bulletCollide = true;
@@ -216,6 +254,7 @@ function initObjects() {
     ARCADE.Player.prototype.shoot = function() {
         if (!this.fired) {
             this.bullets.push(new ARCADE.Bullet(this.pos.x + this.w / 2, this.pos.y + this.h / 2 + 10, this.bulletMovement, this.dmg, this.upgrades.weapon));
+            GAME.PLAYER_S_SFX.play();
             this.fired = true;
             this.firedFrame = frameCount;
         }
@@ -389,6 +428,7 @@ function initObjects() {
     ARCADE.Alien.prototype.shoot = function() {
         if (!this.fired) {
             this.bullets.push(new ARCADE.Bullet(this.pos.x, this.pos.y + this.h / 2, -this.bulletMovement, this.dmg, "A"));
+            GAME.ALIEN_S_SFX.play();
             this.fired = true;
             this.firedFrame = frameCount;
         }
