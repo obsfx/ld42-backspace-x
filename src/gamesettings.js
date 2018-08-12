@@ -4,6 +4,7 @@ const GAME = {
     COL: 30,
     TILE_SIZE: 16,
     SCORE: 0,
+    WAVE: 1,
     PLAYER_SPRITES: [],
     COVER: null,
     COVER_FONT: null,
@@ -12,6 +13,11 @@ const GAME = {
     ALIEN_BULLET: null,
     WEAPON_SPRITES: [],
     MUSIC: null,
+    WRNN: false,
+    WRNN_CD: 80,
+    WRNN_TEXT: "",
+    HEAL: 50,
+    HEAL_COST: 80,
     UPGRADE_SFX: null,
     ALIEN_D_SFX: null,
     ALIEN_S_SFX: null,
@@ -20,11 +26,11 @@ const GAME = {
     METEOR_D_SFX: null,
     PLAYER_CONTROLS: ["87", "65", "83", "68", "32"],
     WEAPONS: [
-        {dmg:1, s: 10, fr: 20},
-        {dmg:1.3, s: 12, fr: 18, cost: 100},
-        {dmg:1.8, s: 13, fr: 17, cost: 300},
-        {dmg:2.2, s: 13.5, fr: 15, cost: 550},
-        {dmg:2.5, s: 15, fr: 10, cost: 800},
+        {dmg:1, s: 10, fr: 18},
+        {dmg:1.3, s: 12, fr: 14, cost: 100},
+        {dmg:1.8, s: 13, fr: 12, cost: 300},
+        {dmg:2.2, s: 13.5, fr: 11, cost: 550},
+        {dmg:2.5, s: 15, fr: 8, cost: 800},
     ],
     HEALTH: [100],
 }
@@ -59,13 +65,13 @@ GAME.INIT_SOURCES = function() {
     GAME.ALIEN_D_SFX.setVolume(0.5);
 
     GAME.ALIEN_S_SFX = loadSound("assets/alienfire.wav");
-    GAME.ALIEN_S_SFX.setVolume(0.5);
+    GAME.ALIEN_S_SFX.setVolume(0.2);
 
     GAME.ALIEN_K_SFX = loadSound("assets/alientd.wav");
     GAME.ALIEN_K_SFX.setVolume(0.5)
 
     GAME.PLAYER_S_SFX = loadSound("assets/shoot.wav");
-    GAME.PLAYER_S_SFX.setVolume(0.5);
+    GAME.PLAYER_S_SFX.setVolume(0.4);
 
     GAME.PLAYER_D_SFX = loadSound("assets/takedmg.wav");
     GAME.PLAYER_D_SFX.setVolume(0.5);

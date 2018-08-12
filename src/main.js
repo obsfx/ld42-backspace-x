@@ -3,7 +3,6 @@ let SM;
 function preload() {
     GAME.INIT_SOURCES();
 }
-
 function setup() {
     document.getElementById("status").style.display = "none";
 
@@ -42,7 +41,8 @@ function COVER_SCENE() {
         textFont(GAME.COVER_FONT);
         textSize(16);
         fill(255,236,39);
-        text("PRESS [ P ] FOR START THE GAME", 90, 210);
+        textAlign(LEFT);
+        text("PRESS [ P ] TO START THE GAME", 90, 210);
     }
 
     this.keyPressed = function() {
@@ -52,33 +52,63 @@ function COVER_SCENE() {
     }
 }
 
-let PLAYER;
 function ARCADE_SCENE() {
     
     let WAVE_PHASE;
     let PHASE_DIF;
     let PHASE_CHANGE_TIME;
 
-    let locations = [];
-
-    ARCADE.Meteors = [];
-    //ARCADE.Meteors_S = new Group();
-
-    ARCADE.Aliens = [];
-    //ARCADE.Aliens_S = new Group();
-
-    frameCount = 0;
-
     this.enter = function() {
         GAME.STATUS = "A";
+        GAME.WAVE = 1;
+        GAME.SCORE = 0;
+        GAME.STARS.stars = [];
 
+        ARCADE.Meteors = [];
+        ARCADE.Aliens = [];
+
+        locations = [];
+        
         PLAYER = new ARCADE.Player();
         HUD.ARCADE.init();
         HUD.ARCADE.updateHP(PLAYER.hp, PLAYER.currentHp);
         HUD.ARCADE.updateWeapon(PLAYER.upgrades.weapon);
         WAVE_PHASE = true;
         PHASE_DIF = [3, 6];
-        PHASE_CHANGE_TIME = 600;
+        PHASE_CHANGE_TIME = 500;
+        WAVE_CD = ((PHASE_CHANGE_TIME * 2) + (PHASE_DIF[0] * 150));
+
+        let pPressed = false; // 80
+        let hPressed = false; // 72
+        window.addEventListener("keydown", function(e) {
+            if (e.keyCode == 32) {
+                e.preventDefault();
+            }
+
+            if (GAME.STATUS == "A") {
+                if (e.keyCode == 80 && !pPressed) {
+                    pPressed = true;
+                    PLAYER.upgrade();
+                }
+
+                if (e.keyCode == 72 && !hPressed) {
+                    hPressed = true;
+                    PLAYER.heal();
+                }
+            }
+        });
+
+        window.addEventListener("keyup", function(e) {
+            if (GAME.STATUS == "A") {
+                if (e.keyCode == 80) {
+                    pPressed = false;
+                }
+
+                if (e.keyCode == 72) {
+                    hPressed = false;
+                }
+            }
+        });
     }
     
     this.keyPressed = function() {
@@ -104,6 +134,23 @@ function ARCADE_SCENE() {
             //console.log(WAVE_PHASE);
         }
 
+        //console.log(WAVE_CD);
+        if (WAVE_CD > 0) {
+            WAVE_CD += -1;
+        } else {
+            if (PHASE_DIF[0] < 9) {
+                PHASE_DIF[0] += 1;
+            }
+
+            if (PHASE_DIF[1] < 20) {
+                PHASE_DIF[1] += 1;
+            }
+
+            GAME.WAVE += 1;
+            WAVE_CD = ((PHASE_CHANGE_TIME * 2) + (PHASE_DIF[0] * 30));
+            HUD.ARCADE.updateWave(GAME.WAVE);
+        }
+
         if (WAVE_PHASE) {
             generateMeteors();
         } else {
@@ -121,6 +168,18 @@ function ARCADE_SCENE() {
         }
 
         PLAYER.draw();
+
+        if (GAME.WRNN) {
+            if (GAME.WRNN_CD > 0) {
+                GAME.WRNN_CD += -1;
+                textFont(GAME.COVER_FONT);
+                textSize(14);
+                fill(216,0,65);
+                text(GAME.WRNN_TEXT, 30, 30);
+            } else {
+                GAME.WRNN = false;
+            }
+        }
 
         if (frameCount % 60 == 0) {
             GAME.SCORE += 1;
@@ -183,30 +242,29 @@ function ARCADE_SCENE() {
 }
 
 function GAME_OVER() {
-    this.enter = function() {
-        alert("OYUN BİTTİ BROM");
-    }
 
     this.draw = function() {
-        background(0);
+        background(GAME.BG_COLOR);
+        textFont(GAME.COVER_FONT);
+        textAlign(CENTER);
+        textSize(28);
+        fill(216,0,65);
+        text("GAME OVER !", width / 2, 200);
+        textSize(20);
+        fill(255);
+        text("WAVES: " + GAME.WAVE, width / 2, 235);
+        text("YOUR SCORE: " + GAME.SCORE, width / 2, 265);
+
+        textSize(16);
+        fill(255,236,39);
+        text("THANK YOU FOR PLAYED THIS GAME !", width / 2, 295);
+        text("YOU CAN PRESS [ R ] TO PLAY AGAIN", width / 2, 325);
+    }
+
+    this.keyPressed = function() {
+        if (keyCode == 82) {
+            GAME.STATUS = "A";
+            SM.showScene(ARCADE_SCENE);
+        }
     }
 }
-
-
-let pPressed = false; // 80
-window.addEventListener("keydown", function(e) {
-    if (e.keyCode == 32) {
-        e.preventDefault();
-    }
-
-    if (e.keyCode == 80 && !pPressed) {
-        pPressed = true;
-        PLAYER.upgrade();
-    }
-});
-
-window.addEventListener("keyup", function(e) {
-    if (e.keyCode == 80) {
-        pPressed = false;
-    }
-});

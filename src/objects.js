@@ -109,7 +109,7 @@ function initObjects() {
 
         if (!this.canTakeDmg) {
             if (this.ctdCD > 0) {
-                console.log(this.ctdCD);
+                //console.log(this.ctdCD);
                 this.ctdCD -= 1;
             } else {
                 this.canTakeDmg = true;
@@ -131,7 +131,7 @@ function initObjects() {
         if (this.currentHp <= 0) {
             GAME.MUSIC.stop();
             HUD.ARCADE.delete();
-            GAME.STATUS = "G"
+            GAME.STATUS = "G";
             SM.showScene(GAME_OVER);
         }
     }
@@ -185,16 +185,7 @@ function initObjects() {
 
                             GAME.SCORE += ARCADE.Meteors[j].point * 2;
                             HUD.ARCADE.updateScore(GAME.SCORE);
-
                             HUD.ARCADE.updatePoint(this.score);
-
-                            if (this.currentHp < this.hp) {
-                                this.currentHp += ARCADE.Meteors[j].point * 0.5;
-                                if (this.currentHp > this.hp) {
-                                    this.currentHp = this.hp;
-                                }
-                                HUD.ARCADE.updateHP(this.hp, this.currentHp);
-                            }
     
                             ARCADE.Meteors.splice(j, 1);
                         } else {
@@ -220,16 +211,7 @@ function initObjects() {
 
                                 GAME.SCORE += ARCADE.Aliens[j].point * 2;
                                 HUD.ARCADE.updateScore(GAME.SCORE);
-
                                 HUD.ARCADE.updatePoint(this.score);
-
-                                if (this.currentHp < this.hp) {
-                                    this.currentHp += ARCADE.Aliens[j].point * 0.3;
-                                    if (this.currentHp > this.hp) {
-                                        this.currentHp = this.hp;
-                                    }
-                                    HUD.ARCADE.updateHP(this.hp, this.currentHp);
-                                }
         
                                 ARCADE.Aliens.splice(j, 1);
                             } else {
@@ -273,8 +255,39 @@ function initObjects() {
                 HUD.ARCADE.updatePoint(this.score);
                 HUD.ARCADE.updateWeapon(this.upgrades.weapon);
 
+            } else {
+                GAME.WRNN = true;
+                GAME.WRNN_CD = 80;
+                GAME.WRNN_TEXT = "NOT ENOUGH SCRAPS !";
             }
         }
+    }
+
+    ARCADE.Player.prototype.heal = function() {
+
+        if (this.currentHp < this.hp) {
+
+            if (GAME.HEAL_COST <= this.score) {
+                this.score += -GAME.HEAL_COST;
+                this.currentHp += GAME.HEAL;
+                if (this.currentHp > this.hp) {
+                    this.currentHp = this.hp;
+                }
+                GAME.UPGRADE_SFX.play();
+                HUD.ARCADE.updatePoint(this.score);
+                HUD.ARCADE.updateHP(this.hp, this.currentHp);
+            } else {
+                GAME.WRNN = true;
+                GAME.WRNN_CD = 80;
+                GAME.WRNN_TEXT = "NOT ENOUGH SCRAPS !";
+            }
+
+        } else {
+            GAME.WRNN = true;
+            GAME.WRNN_CD = 80;
+            GAME.WRNN_TEXT = "YOUR HP IS ALREADY FULL !";
+        }
+
     }
 
     //Bullets
@@ -318,7 +331,7 @@ function initObjects() {
         this.hpbarh = 5;
         this.hpbarshowcd = 0;
         this.dmg = this.t * 5;
-        this.point = this.t * 3; 
+        this.point = this.t * 4; 
         this.movement = createVector( -random(0.5, 2), random(-0.5, 0.5));
     }
 
@@ -387,7 +400,7 @@ function initObjects() {
         this.hpbarw = this.w;
         this.hpbarh = 5;
         this.hpbarshowcd = 0;
-        this.point = this.t * 3; 
+        this.point = this.t * 5; 
         this.movement = createVector( -random(0.5, 2), 0);
         this.bullets = [];
         this.bulletMovement = 5;
