@@ -3,6 +3,7 @@ let SM;
 function preload() {
     GAME.INIT_SOURCES();
 }
+
 function setup() {
     document.getElementById("status").style.display = "none";
 
@@ -59,9 +60,11 @@ function ARCADE_SCENE() {
     let PHASE_CHANGE_TIME;
 
     this.enter = function() {
+        GAME.MUSIC_LOOP();
         GAME.STATUS = "A";
         GAME.WAVE = 1;
         GAME.SCORE = 0;
+
         GAME.STARS.stars = [];
 
         ARCADE.Meteors = [];
@@ -77,38 +80,6 @@ function ARCADE_SCENE() {
         PHASE_DIF = [3, 6];
         PHASE_CHANGE_TIME = 500;
         WAVE_CD = ((PHASE_CHANGE_TIME * 2) + (PHASE_DIF[0] * 150));
-
-        let pPressed = false; // 80
-        let hPressed = false; // 72
-        window.addEventListener("keydown", function(e) {
-            if (e.keyCode == 32) {
-                e.preventDefault();
-            }
-
-            if (GAME.STATUS == "A") {
-                if (e.keyCode == 80 && !pPressed) {
-                    pPressed = true;
-                    PLAYER.upgrade();
-                }
-
-                if (e.keyCode == 72 && !hPressed) {
-                    hPressed = true;
-                    PLAYER.heal();
-                }
-            }
-        });
-
-        window.addEventListener("keyup", function(e) {
-            if (GAME.STATUS == "A") {
-                if (e.keyCode == 80) {
-                    pPressed = false;
-                }
-
-                if (e.keyCode == 72) {
-                    hPressed = false;
-                }
-            }
-        });
     }
     
     this.keyPressed = function() {
@@ -173,6 +144,7 @@ function ARCADE_SCENE() {
             if (GAME.WRNN_CD > 0) {
                 GAME.WRNN_CD += -1;
                 textFont(GAME.COVER_FONT);
+                textAlign(LEFT);
                 textSize(14);
                 fill(216,0,65);
                 text(GAME.WRNN_TEXT, 30, 30);
@@ -184,10 +156,6 @@ function ARCADE_SCENE() {
         if (frameCount % 60 == 0) {
             GAME.SCORE += 1;
             HUD.ARCADE.updateScore(GAME.SCORE);
-        }
-
-        if (!GAME.MUSIC.isPlaying() && GAME.STATUS != "G") {
-            GAME.MUSIC.play();
         }
     }
 
@@ -268,3 +236,35 @@ function GAME_OVER() {
         }
     }
 }
+
+let pPressed = false; // 80
+let hPressed = false; // 72
+window.addEventListener("keydown", function(e) {
+    if (e.keyCode == 32) {
+        e.preventDefault();
+    }
+
+    if (GAME.STATUS == "A") {
+        if (e.keyCode == 80 && !pPressed) {
+            pPressed = true;
+            PLAYER.upgrade();
+        }
+
+        if (e.keyCode == 72 && !hPressed) {
+            hPressed = true;
+            PLAYER.heal();
+        }
+    }
+});
+
+window.addEventListener("keyup", function(e) {
+    if (GAME.STATUS == "A") {
+        if (e.keyCode == 80) {
+            pPressed = false;
+        }
+
+        if (e.keyCode == 72) {
+            hPressed = false;
+        }
+    }
+});

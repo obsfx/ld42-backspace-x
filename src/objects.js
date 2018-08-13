@@ -129,7 +129,7 @@ function initObjects() {
         }
 
         if (this.currentHp <= 0) {
-            GAME.MUSIC.stop();
+            GAME.MUSIC_STOP();
             HUD.ARCADE.delete();
             GAME.STATUS = "G";
             SM.showScene(GAME_OVER);
@@ -276,6 +276,7 @@ function initObjects() {
                 GAME.UPGRADE_SFX.play();
                 HUD.ARCADE.updatePoint(this.score);
                 HUD.ARCADE.updateHP(this.hp, this.currentHp);
+                
             } else {
                 GAME.WRNN = true;
                 GAME.WRNN_CD = 80;

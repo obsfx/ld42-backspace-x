@@ -55,8 +55,21 @@ GAME.INIT_SOURCES = function() {
 
     GAME.COVER = loadImage("assets/cover.jpg");
 
-    GAME.MUSIC = loadSound("assets/bg_music_c.mp3");
-    GAME.MUSIC.setVolume(0.6);
+    GAME.MUSIC = new Audio("assets/bg_music_c.mp3");
+    GAME.MUSIC.volume = 0.6;
+
+    GAME.MUSIC_LOOP = function() {
+        GAME.MUSIC.addEventListener('ended', function() {
+            this.currentTime = 0;
+            this.play();
+        }, false);
+        GAME.MUSIC.play();
+    }
+
+    GAME.MUSIC_STOP = function() {
+        GAME.MUSIC.pause();
+        GAME.MUSIC.currentTime = 0;
+    }
 
     GAME.UPGRADE_SFX = loadSound("assets/upgrade.wav");
     GAME.UPGRADE_SFX.setVolume(0.8);
